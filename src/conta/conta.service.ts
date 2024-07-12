@@ -1,16 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { ContaBancaria } from './conta.model';
+import { ContaFactory } from './conta.factory';
 
 @Injectable()
 export class ContaService {
   private contas: ContaBancaria[] = [];
 
   createConta(contaBancaria: ContaBancaria): ContaBancaria {
-    const newConta = new ContaBancaria(
-      contaBancaria.saldo,
-      contaBancaria.cliente,
-      contaBancaria.tipo,
-    );
+    const newConta = ContaFactory.criarConta(contaBancaria);
     this.contas.push(newConta);
     return newConta;
   }

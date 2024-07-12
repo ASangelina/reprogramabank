@@ -1,37 +1,66 @@
 import { Cliente } from '../cliente/cliente.model';
 import { v4 as uuidv4 } from 'uuid';
 
-export class ContaBancaria {
-  id: string;
-  saldo: number;
-  cliente: Cliente;
-  tipo: string;
+export abstract class ContaBancaria {
+  private _id: string;
+  private _cliente: Cliente;
+  private _tipo: string;
+  private _saldo: number;
 
   constructor(saldo: number, cliente: Cliente, tipo: string) {
-    this.id = uuidv4();
-    this.saldo = saldo;
-    this.cliente = cliente;
-    this.tipo = tipo;
+    this._id = uuidv4();
+    this._saldo = saldo;
+    this._cliente = cliente;
+    this._tipo = tipo;
   }
-
   depositar(valor: number): void {
-    this.saldo += valor;
+    this._saldo += valor;
   }
 
   sacar(valor: number): void {
-    if (this.saldo >= valor) {
-      this.saldo -= valor;
+    if (this._saldo >= valor) {
+      this._saldo -= valor;
     } else {
       throw new Error('Saldo insuficiente');
     }
   }
 
   verificarSaldo(): number {
-    return this.saldo;
+    return this._saldo;
   }
 
-  transferir(destino: ContaBancaria, valor: number): void {
-    this.sacar(valor);
-    destino.depositar(valor);
+  abstract transferir(destino: ContaBancaria, valor: number): void;
+
+
+  get id(): string {
+    return this._id;
+  }
+
+  set id(value: string) {
+    this._id = value;
+  }
+
+  get cliente(): Cliente {
+    return this._cliente;
+  }
+
+  set cliente(value: Cliente) {
+    this._cliente = value;
+  }
+
+  get tipo(): string {
+    return this._tipo;
+  }
+
+  set tipo(value: string) {
+    this._tipo = value;
+  }
+
+  get saldo(): number {
+    return this._saldo;
+  }
+
+  set saldo(value: number) {
+    this._saldo = value;
   }
 }
