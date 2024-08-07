@@ -1,7 +1,7 @@
-import { Cliente } from '../cliente/cliente.model';
+import { Cliente } from './cliente.model';
 import { ContaBancaria } from './conta.model';
 
-export class ContaPoupanca extends ContaBancaria {
+export class Contapoupanca extends ContaBancaria {
   private taxaJuros;
   constructor(saldo: number, cliente: Cliente) {
     super(saldo, cliente, 'poupanca');

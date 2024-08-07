@@ -1,4 +1,4 @@
-import { Cliente } from '../cliente/cliente.model';
+import { Cliente } from './cliente.model';
 import { v4 as uuidv4 } from 'uuid';
 
 export abstract class ContaBancaria {

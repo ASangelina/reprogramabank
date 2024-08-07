@@ -1,11 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { Gerente } from './gerente.model';
+import { Gerente } from '../entities/gerente.model';
+import { ICreateGerenteDto } from "../../aplication/dtos/gerente.dto.create";
+import { IUpdateGerenteDto } from "../../aplication/dtos/gerente.dto.update";
 
 @Injectable()
 export class GerenteService {
   private gerentes: Gerente[] = [];
 
-  createGerente(gerente: Gerente): Gerente {
+  createGerente(gerente: ICreateGerenteDto): Gerente {
     const newGerente = new Gerente(gerente.nomeCompleto, gerente.clientes);
     this.gerentes.push(newGerente);
     return newGerente;
@@ -23,7 +25,7 @@ export class GerenteService {
     this.gerentes = this.gerentes.filter((gerente) => gerente.id !== id);
   }
 
-  updateGerente(id: string, gerenteAtualizado: Gerente): Gerente {
+  updateGerente(id: string, gerenteAtualizado: IUpdateGerenteDto): Gerente {
     const gerente = this.getGerenteById(id);
     if (!gerente) {
       return null;

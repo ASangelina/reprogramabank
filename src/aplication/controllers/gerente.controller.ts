@@ -1,14 +1,25 @@
-import {Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Put,} from '@nestjs/common';
-import { GerenteService } from './gerente.service';
-import { Gerente } from './gerente.model';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpException,
+  HttpStatus,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
+import { GerenteService } from '../../domain/services/gerente.service';
+import { ICreateGerenteDto } from '../dtos/gerente.dto.create';
+import { IUpdateGerenteDto } from '../dtos/gerente.dto.update';
 
 @Controller('gerentes')
 export class GerenteController {
   constructor(private readonly gerenteService: GerenteService) {}
 
   @Post('criar')
-  createGerente(@Body() body: { gerente: Gerente }) {
-    const gerente = this.gerenteService.createGerente(body.gerente);
+  createGerente(@Body() body: { gerenteDTO: ICreateGerenteDto }) {
+    const gerente = this.gerenteService.createGerente(body.gerenteDTO);
     return {
       statusCode: HttpStatus.CREATED,
       message: 'Gerente criado com sucesso',
@@ -52,8 +63,14 @@ export class GerenteController {
   }
 
   @Put(':id')
-  updateGerente(@Param('id') id: string, @Body() body: { gerente: Gerente }) {
-    const gerente = this.gerenteService.updateGerente(id, body.gerente);
+  updateGerente(
+    @Param('id') id: string,
+    @Body() body: { gerenteUpdateDTO: IUpdateGerenteDto },
+  ) {
+    const gerente = this.gerenteService.updateGerente(
+      id,
+      body.gerenteUpdateDTO,
+    );
 
     if (!gerente) {
       throw new HttpException('gerente não encontrado', HttpStatus.NOT_FOUND);

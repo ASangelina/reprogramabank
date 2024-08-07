@@ -1,6 +1,6 @@
-import { Pagamento } from "./pagamento.model";
+import { IPagamento } from "../interfaces/pagamento.interface";
 
-export class PagamentoPIX implements Pagamento {
+export class Pagamentopix implements IPagamento {
   private chavePIX: string;
 
   constructor(chavePIX: string) {

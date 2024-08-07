@@ -1,7 +1,7 @@
 import { ContaBancaria } from './conta.model';
-import { Cliente } from '../cliente/cliente.model';
+import { Cliente } from './cliente.model';
 
-export class ContaCorrente extends ContaBancaria {
+export class Contacorrente extends ContaBancaria {
   private chequeEspecial;
   constructor(saldo: number, cliente: Cliente) {
     super(saldo, cliente, 'corrente');

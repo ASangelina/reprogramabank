@@ -1,3 +1,3 @@
-export interface Pagamento {
+export interface IPagamento {
   pagar(valor: number): void;
 }

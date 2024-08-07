@@ -1,11 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { Cliente } from './cliente.model';
+import { Cliente } from '../entities/cliente.model';
+import { ICreateClienteDto } from "../../aplication/dtos/cliente.dto.create";
+import { IUpdateClienteDto } from "../../aplication/dtos/cliente.dto.update";
 
 @Injectable()
 export class ClienteService {
   private clientes: Cliente[] = [];
 
-  createCliente(cliente: Cliente): Cliente {
+  createCliente(cliente: ICreateClienteDto): Cliente {
     const newCliente = new Cliente(
       cliente.nomeCompleto,
       cliente.endereco,
@@ -29,7 +31,7 @@ export class ClienteService {
     this.clientes = this.clientes.filter((cliente) => cliente.id !== id);
   }
 
-  updateCliente(id: string, clienteAtualizado: Cliente): Cliente {
+  updateCliente(id: string, clienteAtualizado: IUpdateClienteDto): Cliente {
     const cliente = this.getClienteById(id);
     if (!cliente) {
       return null;
@@ -42,7 +44,7 @@ export class ClienteService {
     return cliente;
   }
 
-  patchCliente(id: string, updates: Partial<Cliente>): Cliente {
+  patchCliente(id: string, updates: Partial<IUpdateClienteDto>): Cliente {
     const cliente = this.getClienteById(id);
     if (!cliente) {
       return null;

@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
-import { ContaBancaria } from '../conta/conta.model';
-import { Gerente } from '../gerente/gerente.model';
+import { ContaBancaria } from './conta.model';
+import { Gerente } from './gerente.model';
 
 export class Cliente {
   nomeCompleto: string;

@@ -1,6 +1,6 @@
 import {Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Put,} from '@nestjs/common';
-import { ContaService } from './conta.service';
-import { ContaBancaria } from './conta.model';
+import { ContaService } from '../../domain/services/conta.service';
+import { ContaBancaria } from '../../domain/entities/conta.model';
 
 @Controller('contas')
 export class ContaController {

@@ -1,14 +1,16 @@
 import {Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Patch, Post, Put, Query,} from '@nestjs/common';
-import { ClienteService } from './cliente.service';
-import { Cliente } from './cliente.model';
+import { ClienteService } from '../../domain/services/cliente.service';
+import { Cliente } from '../../domain/entities/cliente.model';
+import { ICreateClienteDto } from "../dtos/cliente.dto.create";
+import { IUpdateClienteDto } from "../dtos/cliente.dto.update";
 
 @Controller('clientes')
 export class ClienteController {
   constructor(private readonly clienteService: ClienteService) {}
 
   @Post('criar')
-  createCliente(@Body() body: { cliente: Cliente }) {
-    const cliente = this.clienteService.createCliente(body.cliente);
+  createCliente(@Body() body: { clienteDTO: ICreateClienteDto }) {
+    const cliente = this.clienteService.createCliente(body.clienteDTO);
     return {
       statusCode: HttpStatus.CREATED,
       message: 'Cliente criado com sucesso',
@@ -52,7 +54,7 @@ export class ClienteController {
   }
 
   @Put(':id')
-  updateCliente(@Param('id') id: string, @Body() body: { cliente: Cliente }) {
+  updateCliente(@Param('id') id: string, @Body() body: { cliente: IUpdateClienteDto }) {
     const cliente = this.clienteService.updateCliente(id, body.cliente);
 
     if (!cliente) {
@@ -66,7 +68,7 @@ export class ClienteController {
   }
 
   @Patch('/edit/:id')
-  patchCliente(@Param('id') id: string, @Query() updates: Partial<Cliente>) {
+  patchCliente(@Param('id') id: string, @Query() updates: Partial<IUpdateClienteDto>) {
     const cliente = this.clienteService.patchCliente(id, updates);
     if (!cliente) {
       return {
