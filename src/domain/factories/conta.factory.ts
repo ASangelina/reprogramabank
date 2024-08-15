@@ -1,6 +1,6 @@
-import { ContaBancaria } from '../../domain/entities/conta.model';
-import { Contacorrente } from '../../domain/entities/contacorrente';
-import { Contapoupanca } from '../../domain/entities/contapoupanca';
+import { ContaBancaria } from '../entities/conta.model';
+import { Contacorrente } from '../entities/contacorrente';
+import { Contapoupanca } from '../entities/contapoupanca';
 
 export class ContaFactory {
   static criarConta(conta: ContaBancaria): Contacorrente | Contapoupanca {
