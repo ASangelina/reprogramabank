@@ -1,5 +1,5 @@
 import { ContaBancaria } from './conta.model';
-import { Cliente } from './cliente.model';
+import { Cliente } from "./cliente.entity";
 
 export class Contacorrente extends ContaBancaria {
   private chequeEspecial;

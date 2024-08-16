@@ -1,4 +1,4 @@
-import { IPagamento } from "../interfaces/pagamento.interface";
+import { IPagamento } from '../interfaces/pagamento.interface';
 
 export class Pagamentopix implements IPagamento {
   private chavePIX: string;

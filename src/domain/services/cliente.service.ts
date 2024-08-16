@@ -1,13 +1,19 @@
-import { Injectable } from '@nestjs/common';
-import { Cliente } from '../entities/cliente.model';
-import { ICreateClienteDto } from "../../aplication/dtos/cliente.dto.create";
-import { IUpdateClienteDto } from "../../aplication/dtos/cliente.dto.update";
+import { Inject, Injectable } from '@nestjs/common';
+import { ICreateClienteDto } from '../../aplication/dtos/cliente.dto.create';
+import { IUpdateClienteDto } from '../../aplication/dtos/cliente.dto.update';
+import { IClienteRepository } from '../interfaces/cliente.interface';
+import { Cliente } from '../entities/cliente.entity';
 
 @Injectable()
 export class ClienteService {
   private clientes: Cliente[] = [];
 
-  createCliente(cliente: ICreateClienteDto): Cliente {
+  constructor(
+    @Inject('IClienteRepository')
+    private readonly clienteRepository: IClienteRepository,
+  ) {}
+
+  async createCliente(cliente: ICreateClienteDto): Promise<Cliente> {
     const newCliente = new Cliente(
       cliente.nomeCompleto,
       cliente.endereco,
@@ -16,23 +22,23 @@ export class ClienteService {
       cliente.gerente,
     );
     this.clientes.push(newCliente);
-    return newCliente;
+    return await this.clienteRepository.save(newCliente);
   }
 
-  getAllClientes(): Cliente[] {
-    return this.clientes;
+  async getAllClientes(): Promise<Cliente[]> {
+    return this.clienteRepository.findAll();
   }
 
-  getClienteById(id: string): Cliente {
+  async getClienteById(id: string): Promise<Cliente> {
     return this.clientes.find((cliente) => cliente.id === id);
   }
 
-  deleteClienteById(id: string): void {
-    this.clientes = this.clientes.filter((cliente) => cliente.id !== id);
+  async deleteClienteById(id: string): Promise<boolean> {
+    return await this.clienteRepository.delete(id);
   }
 
-  updateCliente(id: string, clienteAtualizado: IUpdateClienteDto): Cliente {
-    const cliente = this.getClienteById(id);
+  async updateCliente(id: string, clienteAtualizado: IUpdateClienteDto): Promise<Cliente | null> {
+    const cliente = await this.clienteRepository.findById(id);
     if (!cliente) {
       return null;
     }
@@ -41,11 +47,11 @@ export class ClienteService {
     cliente.endereco = clienteAtualizado.endereco;
     cliente.telefone = clienteAtualizado.telefone;
 
-    return cliente;
+    return await this.clienteRepository.save(cliente);
   }
 
-  patchCliente(id: string, updates: Partial<IUpdateClienteDto>): Cliente {
-    const cliente = this.getClienteById(id);
+  async patchCliente(id: string, updates: Partial<IUpdateClienteDto>): Promise<Cliente> {
+    const cliente = await this.clienteRepository.findById(id);
     if (!cliente) {
       return null;
     }
@@ -58,6 +64,6 @@ export class ClienteService {
       }
     });
 
-    return cliente;
+    return await this.clienteRepository.save(cliente);
   }
 }

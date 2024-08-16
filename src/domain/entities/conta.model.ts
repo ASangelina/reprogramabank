@@ -1,5 +1,5 @@
-import { Cliente } from './cliente.model';
 import { v4 as uuidv4 } from 'uuid';
+import { Cliente } from './cliente.entity';
 
 export abstract class ContaBancaria {
   private _id: string;

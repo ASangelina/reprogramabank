@@ -1,5 +1,5 @@
-import { Cliente } from './cliente.model';
 import { ContaBancaria } from './conta.model';
+import { Cliente } from "./cliente.entity";
 
 export class Contapoupanca extends ContaBancaria {
   private taxaJuros;

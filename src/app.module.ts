@@ -1,21 +1,27 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { ClienteService } from './domain/services/cliente.service';
-import { ClienteController } from './aplication/controllers/cliente.controller';
-import { GerenteService } from './domain/services/gerente.service';
-import { GerenteController } from './aplication/controllers/gerente.controller';
-import { ContaService } from './domain/services/conta.service';
-import { ContaController } from './aplication/controllers/conta.controller';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Cliente } from './domain/entities/cliente.entity';
+import { ApplicationModule } from './aplication/aplication.module';
+import { DomainModule } from './domain/domain.module';
+import { InfrastructureModule } from './infrastructure/infrasctructure.module';
 
 @Module({
-  imports: [],
-  controllers: [
-    AppController,
-    ClienteController,
-    GerenteController,
-    ContaController,
+  imports: [
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      host: 'localhost',
+      port: 5432,
+      database: 'reprograma',
+      username: 'teste',
+      password: '123456',
+      entities: [Cliente],
+      synchronize: true,
+    }),
+    ApplicationModule,
+    DomainModule,
+    InfrastructureModule,
   ],
-  providers: [AppService, ClienteService, GerenteService, ContaService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
