@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -19,47 +20,38 @@ export class GerenteController {
 
   @Post('criar')
   createGerente(@Body() body: { gerenteDTO: ICreateGerenteDto }) {
-    const gerente = this.gerenteService.createGerente(body.gerenteDTO);
-    return {
-      statusCode: HttpStatus.CREATED,
-      message: 'Gerente criado com sucesso',
-      data: gerente,
-    };
+    try {
+      return this.gerenteService.createGerente(body.gerenteDTO);
+    } catch (error) {
+      throw new BadRequestException({ error: error.message });
+    }
   }
 
   @Get()
   getAll() {
-    const gerentes = this.gerenteService.getAllGerentes();
-
-    return {
-      statusCode: HttpStatus.OK,
-      message: 'Todas os gerentes retornados com sucesso',
-      data: gerentes,
-    };
+    try {
+      return this.gerenteService.getAllGerentes();
+    } catch (error) {
+      throw new BadRequestException({ error: error.message });
+    }
   }
 
   @Get(':id')
   getById(@Param('id') id: string) {
-    const gerente = this.gerenteService.getGerenteById(id);
-
-    if (!gerente) {
-      throw new HttpException('Gerente não encontrado', HttpStatus.NOT_FOUND);
+    try {
+      return this.gerenteService.getGerenteById(id);
+    } catch (error) {
+      throw new BadRequestException({ error: error.message });
     }
-
-    return {
-      statusCode: HttpStatus.OK,
-      message: 'Todos os gerentes retornados com sucesso',
-      data: gerente,
-    };
   }
 
   @Delete(':id')
   deleteById(@Param('id') id: string) {
-    this.gerenteService.deleteGerenteById(id);
-    return {
-      statusCode: HttpStatus.NO_CONTENT,
-      message: `Gerente deletado com sucesso`,
-    };
+    try {
+      return this.gerenteService.deleteGerenteById(id);
+    } catch (error) {
+      throw new BadRequestException({ error: error.message });
+    }
   }
 
   @Put(':id')
@@ -67,18 +59,10 @@ export class GerenteController {
     @Param('id') id: string,
     @Body() body: { gerenteUpdateDTO: IUpdateGerenteDto },
   ) {
-    const gerente = this.gerenteService.updateGerente(
-      id,
-      body.gerenteUpdateDTO,
-    );
-
-    if (!gerente) {
-      throw new HttpException('gerente não encontrado', HttpStatus.NOT_FOUND);
+    try {
+      return this.gerenteService.updateGerente(id, body.gerenteUpdateDTO);
+    } catch (error) {
+      throw new BadRequestException({ error: error.message });
     }
-    return {
-      statusCode: HttpStatus.OK,
-      message: 'gerente atualizado com sucesso',
-      data: gerente,
-    };
   }
 }

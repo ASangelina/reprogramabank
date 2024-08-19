@@ -1,38 +1,44 @@
-import { Injectable } from '@nestjs/common';
-import { Gerente } from '../entities/gerente.model';
-import { ICreateGerenteDto } from "../../aplication/dtos/gerente.dto.create";
-import { IUpdateGerenteDto } from "../../aplication/dtos/gerente.dto.update";
+import { Inject, Injectable } from '@nestjs/common';
+import { ICreateGerenteDto } from '../../aplication/dtos/gerente.dto.create';
+import { IUpdateGerenteDto } from '../../aplication/dtos/gerente.dto.update';
+import { Gerente } from '../entities/gerente.entity';
+import { IGerenteRepository } from '../interfaces/gerente.interface';
 
 @Injectable()
 export class GerenteService {
   private gerentes: Gerente[] = [];
 
-  createGerente(gerente: ICreateGerenteDto): Gerente {
+  constructor(
+    @Inject('IGerenteRepository')
+    private readonly gerenteRepository: IGerenteRepository,
+  ) {}
+
+  async createGerente(gerente: ICreateGerenteDto): Promise<Gerente> {
     const newGerente = new Gerente(gerente.nomeCompleto, gerente.clientes);
     this.gerentes.push(newGerente);
-    return newGerente;
+    return await this.gerenteRepository.save(newGerente);
   }
 
-  getAllGerentes(): Gerente[] {
-    return this.gerentes;
+  async getAllGerentes(): Promise<Gerente[]> {
+    return await this.gerenteRepository.findAll();
   }
 
-  getGerenteById(id: string): Gerente {
-    return this.gerentes.find((gerente) => gerente.id === id);
+  async getGerenteById(id: string): Promise<Gerente> {
+    return await this.gerenteRepository.findById(id);
   }
 
-  deleteGerenteById(id: string): void {
-    this.gerentes = this.gerentes.filter((gerente) => gerente.id !== id);
+  async deleteGerenteById(id: string): Promise<boolean> {
+    return await this.gerenteRepository.delete(id);
   }
 
-  updateGerente(id: string, gerenteAtualizado: IUpdateGerenteDto): Gerente {
-    const gerente = this.getGerenteById(id);
+  async updateGerente(id: string, gerenteAtualizado: IUpdateGerenteDto): Promise<Gerente | null> {
+    const gerente = await this.gerenteRepository.findById(id);
     if (!gerente) {
       return null;
     }
 
     gerente.nomeCompleto = gerenteAtualizado.nomeCompleto;
 
-    return gerente;
+    return await this.gerenteRepository.save(gerente);
   }
 }

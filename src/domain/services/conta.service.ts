@@ -1,37 +1,45 @@
-import { Injectable } from '@nestjs/common';
-import { ContaBancaria } from '../entities/conta.model';
+import { Inject, Injectable } from '@nestjs/common';
 import { ContaFactory } from '../factories/conta.factory';
+import { Conta } from '../entities/conta.entity';
+import { IContaRepository } from '../interfaces/conta.interface';
+import { ICreateContaDto } from '../../aplication/dtos/conta.dto.create';
+import { Contacorrente } from "../entities/contacorrente";
 
 @Injectable()
 export class ContaService {
-  private contas: ContaBancaria[] = [];
+  private contas: Conta[] = [];
 
-  createConta(contaBancaria: ContaBancaria): ContaBancaria {
-    const newConta = ContaFactory.criarConta(contaBancaria);
+  constructor(
+    @Inject('IContaRepository')
+    private readonly contaRepository: IContaRepository,
+  ) {}
+
+  async createConta(conta: ICreateContaDto): Promise<Conta> {
+    const newConta = ContaFactory.criarConta(conta);
     this.contas.push(newConta);
-    return newConta;
+    return await this.contaRepository.save(newConta);
   }
 
-  getAllContas(): ContaBancaria[] {
-    return this.contas;
+  async getAllContas(): Promise<Conta[]> {
+    return await this.contaRepository.findAll();
   }
 
-  getContaById(id: string): ContaBancaria {
-    return this.contas.find((gerente) => gerente.id === id);
+  async getContaById(id: string): Promise<Conta> {
+    return await this.contaRepository.findById(id);
   }
 
-  deleteContaById(id: string): void {
-    this.contas = this.contas.filter((conta) => conta.id !== id);
+  async deleteContaById(id: string): Promise<boolean> {
+    return await this.contaRepository.delete(id);
   }
 
-  updateConta(id: string, contaAtualizada: ContaBancaria): ContaBancaria {
-    const conta = this.getContaById(id);
+  async updateConta(id: string, contaAtualizada: Conta): Promise<Conta | null> {
+    const conta = await this.contaRepository.findById(id);
     if (!conta) {
       return null;
     }
 
     conta.tipo = contaAtualizada.tipo;
 
-    return conta;
+    return await this.contaRepository.save(conta);
   }
 }

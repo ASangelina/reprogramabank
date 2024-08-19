@@ -26,11 +26,11 @@ export class ClienteService {
   }
 
   async getAllClientes(): Promise<Cliente[]> {
-    return this.clienteRepository.findAll();
+    return await this.clienteRepository.findAll();
   }
 
   async getClienteById(id: string): Promise<Cliente> {
-    return this.clientes.find((cliente) => cliente.id === id);
+    return await this.clienteRepository.findById(id);
   }
 
   async deleteClienteById(id: string): Promise<boolean> {

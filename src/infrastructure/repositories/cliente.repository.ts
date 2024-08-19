@@ -13,7 +13,7 @@ export class ClienteRepository implements IClienteRepository {
 
   async findAll(): Promise<Cliente[]> {
     return await this.clienteRepository.find({
-      relations: ['contas', 'gerente'],
+      relations: ['contas', 'gerentes'],
     });
   }
 
@@ -24,7 +24,7 @@ export class ClienteRepository implements IClienteRepository {
   findById(id: string): Promise<Cliente | null> {
     return this.clienteRepository.findOne({
       where: { id },
-      relations: ['contas', 'gerente'],
+      relations: ['contas', 'gerentes'],
     });
   }
 

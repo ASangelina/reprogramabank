@@ -8,7 +8,7 @@ import {
 import { v4 as uuidv4 } from 'uuid';
 import { Cliente } from './cliente.entity';
 
-@Entity('Gerente')
+@Entity('gerentes')
 export class Gerente {
   @PrimaryGeneratedColumn('uuid')
   public id: string;
@@ -23,7 +23,7 @@ export class Gerente {
   public clientes: Cliente[];
 
 
-  constructor(id: string, nomeCompleto: string, clientes: Cliente[]) {
+  constructor(nomeCompleto: string, clientes: Cliente[]) {
     this.id = uuidv4();
     this.nomeCompleto = nomeCompleto;
     this.clientes = clientes;

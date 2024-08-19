@@ -1,67 +1,64 @@
-import {Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Put,} from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { ContaService } from '../../domain/services/conta.service';
-import { ContaBancaria } from '../../domain/entities/conta.model';
+import { Conta } from '../../domain/entities/conta.entity';
+import { ICreateContaDto } from '../dtos/conta.dto.create';
 
 @Controller('contas')
 export class ContaController {
   constructor(private readonly contaService: ContaService) {}
 
   @Post('criar')
-  createConta(@Body() body: { contaBancaria: ContaBancaria }) {
-    const conta = this.contaService.createConta(body.contaBancaria);
-    return {
-      statusCode: HttpStatus.CREATED,
-      message: 'Conta criada com sucesso',
-      data: conta,
-    };
+  createConta(@Body() body: { contaDTO: ICreateContaDto }) {
+    try {
+      console.log(body.contaDTO);
+      return this.contaService.createConta(body.contaDTO);
+    } catch (error) {
+      throw new BadRequestException({ error: error.message });
+    }
   }
 
   @Get()
   getAll() {
-    const contas = this.contaService.getAllContas();
-
-    return {
-      statusCode: HttpStatus.OK,
-      message: 'Todas as contas retornados com sucesso',
-      data: contas,
-    };
+    try {
+      return this.contaService.getAllContas();
+    } catch (error) {
+      throw new BadRequestException({ error: error.message });
+    }
   }
 
   @Get(':id')
   getById(@Param('id') id: string) {
-    const conta = this.contaService.getContaById(id);
-
-    if (!conta) {
-      throw new HttpException('Conta não encontrada', HttpStatus.NOT_FOUND);
+    try {
+      return this.contaService.getContaById(id);
+    } catch (error) {
+      throw new BadRequestException({ error: error.message });
     }
-
-    return {
-      statusCode: HttpStatus.OK,
-      message: 'Todas as contas retornados com sucesso',
-      data: conta,
-    };
   }
 
   @Delete(':id')
   deleteById(@Param('id') id: string) {
-    this.contaService.deleteContaById(id);
-    return {
-      statusCode: HttpStatus.NO_CONTENT,
-      message: `Conta deletada com sucesso`,
-    };
+    try {
+      return this.contaService.deleteContaById(id);
+    } catch (error) {
+      throw new BadRequestException({ error: error.message });
+    }
   }
 
   @Put(':id')
-  updateConta(@Param('id') id: string, @Body() body: { contaBancaria: ContaBancaria }) {
-    const conta = this.contaService.updateConta(id, body.contaBancaria);
-
-    if (!conta) {
-      throw new HttpException('conta não encontrada', HttpStatus.NOT_FOUND);
+  updateConta(@Param('id') id: string, @Body() body: { conta: Conta }) {
+    try {
+      return this.contaService.updateConta(id, body.conta);
+    } catch (error) {
+      throw new BadRequestException({ error: error.message });
     }
-    return {
-      statusCode: HttpStatus.OK,
-      message: 'conta atualizada com sucesso',
-      data: conta,
-    };
   }
 }

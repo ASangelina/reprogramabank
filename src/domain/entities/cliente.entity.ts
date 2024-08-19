@@ -3,13 +3,14 @@ import {
   PrimaryGeneratedColumn,
   Column,
   ManyToOne,
-  JoinColumn, OneToOne
+  JoinColumn,
+  OneToOne,
 } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
-import { ContaBancaria } from './conta.model';
-import { Gerente } from './gerente.model';
+import { Conta } from './conta.entity';
+import { Gerente } from './gerente.entity';
 
-@Entity('Cliente')
+@Entity('clientes')
 export class Cliente {
   @PrimaryGeneratedColumn('uuid')
   public id: string;
@@ -23,14 +24,14 @@ export class Cliente {
   @Column()
   public telefone: string;
 
-  @OneToOne(() => ContaBancaria, {
-    nullable: true
+  @OneToOne(() => Conta, {
+    nullable: true,
   })
   @JoinColumn()
-  public contas: ContaBancaria[];
+  public contas: Conta[];
 
   @ManyToOne(() => Gerente, {
-    nullable: true
+    nullable: true,
   })
   @JoinColumn()
   public gerente: Gerente;
@@ -39,7 +40,7 @@ export class Cliente {
     nomeCompleto: string,
     endereco: string,
     telefone: string,
-    contas: ContaBancaria[],
+    contas: Conta[],
     gerente: Gerente,
   ) {
     this.id = uuidv4();

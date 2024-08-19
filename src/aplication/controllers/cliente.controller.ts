@@ -22,6 +22,7 @@ export class ClienteController {
   @Post('criar')
   createCliente(@Body() body: { clienteDTO: ICreateClienteDto }) {
     try {
+      console.log(body.clienteDTO);
       return this.clienteService.createCliente(body.clienteDTO);
     } catch (error) {
       throw new BadRequestException({ error: error.message });

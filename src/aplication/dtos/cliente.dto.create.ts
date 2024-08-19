@@ -1,10 +1,10 @@
-import { ContaBancaria } from "../../domain/entities/conta.model";
-import { Gerente } from "../../domain/entities/gerente.model";
+import { Gerente } from '../../domain/entities/gerente.entity';
+import { Conta } from '../../domain/entities/conta.entity';
 
 export interface ICreateClienteDto {
-  nomeCompleto: string
+  nomeCompleto: string;
   endereco: string;
   telefone: string;
-  contas: ContaBancaria[];
+  contas: Conta[];
   gerente: Gerente;
 }

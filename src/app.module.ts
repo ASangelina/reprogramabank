@@ -4,6 +4,9 @@ import { Cliente } from './domain/entities/cliente.entity';
 import { ApplicationModule } from './aplication/aplication.module';
 import { DomainModule } from './domain/domain.module';
 import { InfrastructureModule } from './infrastructure/infrasctructure.module';
+import { Conta } from './domain/entities/conta.entity';
+import { Gerente } from './domain/entities/gerente.entity';
+import { AppController } from "./app.controller";
 
 @Module({
   imports: [
@@ -14,7 +17,7 @@ import { InfrastructureModule } from './infrastructure/infrasctructure.module';
       database: 'reprograma',
       username: 'teste',
       password: '123456',
-      entities: [Cliente],
+      entities: [Cliente, Conta, Gerente],
       synchronize: true,
     }),
     ApplicationModule,
